@@ -1,0 +1,24 @@
+PATH
+  remote: .
+  specs:
+    toggl_integrator (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rake (10.5.0)
+    redcarpet (2.3.0)
+    yard (0.9.12)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.16)
+  rake (~> 10.0)
+  redcarpet (~> 2.2)
+  toggl_integrator!
+  yard (~> 0.8)
+
+BUNDLED WITH
+   1.16.0
