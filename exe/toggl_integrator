@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
 require "toggl_integrator"
+
+TogglIntegrator::Command.run ARGV
