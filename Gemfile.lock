@@ -1,10 +1,19 @@
+GIT
+  remote: https://github.com/kanet77/togglv8
+  revision: ef3167688340909b913994079537cfe02edb8fa9
+  branch: master
+  specs:
+    togglv8 (1.2.1)
+      faraday
+      logger
+      oj
+
 PATH
   remote: .
   specs:
     toggl_integrator (0.1.0)
       activerecord (~> 4.2.0)
       sqlite3 (~> 1.3.0)
-      togglv8 (~> 1.2)
 
 GEM
   remote: https://rubygems.org/
@@ -37,10 +46,6 @@ GEM
     redcarpet (2.3.0)
     sqlite3 (1.3.13)
     thread_safe (0.3.6)
-    togglv8 (1.2.1)
-      faraday
-      logger
-      oj
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
     yard (0.9.12)
@@ -54,6 +59,7 @@ DEPENDENCIES
   rake (~> 10.0)
   redcarpet (~> 2.2)
   toggl_integrator!
+  togglv8!
   yard (~> 0.8)
 
 BUNDLED WITH
