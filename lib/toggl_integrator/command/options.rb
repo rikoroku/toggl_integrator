@@ -13,13 +13,13 @@ module TogglIntegrator
       def self.parse! argv
         options = {}
 
-        sub_command_parsers = create_sub_command_parsers
+        sub_command_parsers = create_sub_command_parsers options
         command_parser      = create_command_parser
 
         begin
           command_parser.order! argv
 
-          options[:options] = argv.shift
+          options[:command] = argv.shift
 
           sub_command_parsers[options[:command]].parse! argv
 
@@ -30,7 +30,7 @@ module TogglIntegrator
         options
       end
 
-      def self.create_sub_command_parsers
+      def self.create_sub_command_parsers options
         sub_command_parsers = Hash.new do |k, v|
           rails ArgumentError, "'#{v}' is not toggl_integrator sub command."
         end
@@ -44,6 +44,8 @@ module TogglIntegrator
 
         sub_command_parsers["status"] = OptionParser.new do |opt|
         end
+
+        sub_command_parsers
       end
 
       def self.create_command_parser
