@@ -11,7 +11,7 @@ GIT
 PATH
   remote: .
   specs:
-    toggl_integrator (0.1.0)
+    toggl_integrator (1.0.0)
       activerecord (~> 4.2.0)
       google-api-client
       sqlite3 (~> 1.3.0)
