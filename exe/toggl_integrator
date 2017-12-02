@@ -2,4 +2,4 @@
 
 require "toggl_integrator"
 
-TogglIntegrator::Command.run ARGV
+TogglIntegrator::Command.run

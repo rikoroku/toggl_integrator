@@ -12,7 +12,7 @@ module TogglIntegrator
     # Connection processing to DB and Creating tables
     # @return [void]
     def self.prepare
-      database_path = File.join(ENV["HOME"], ".toggl_integrator", "toggl_integrator.sqlite3")
+      database_path = File.join(".toggl_integrator", "toggl_integrator.sqlite3")
 
       connect_database database_path
       create_table_if_not_exists database_path
@@ -31,12 +31,12 @@ module TogglIntegrator
       return if connection.table_exists? :tasks
 
       connection.create_table :tasks do |t|
-        t.column :wid,         :integer,   null:true
-        t.column :pid,         :integer,   null:true
-        t.column :description, :string,    null:true
-        t.column :start,       :timestamp, null:false
-        t.column :stop,        :timestamp, null:false
-        t.column :status,      :integer,   default: 0, null:true
+        t.column :project_name, :string,    null:true
+        t.column :description,  :string,    null:true
+        t.column :start,        :timestamp, null:false
+        t.column :stop,         :timestamp, null:false
+        t.column :at,           :timestamp, null:false
+        t.column :status,       :integer,   default: 0, null:true
         t.timestamps
       end
       connection.add_index :tasks, :start
