@@ -12,10 +12,8 @@ module TogglIntegrator
   # @author rikoroku
   class GoogleCalendar
 
-    attr_accessor :log, :config
-
     def initialize
-      yield self if block_given?
+      @config = YAML.load_file "config.yml"
       @service = Google::Apis::CalendarV3::CalendarService.new
       @service.client_options.application_name = @config["google"]["application_name"]
       @service.authorization = authorize
@@ -39,7 +37,7 @@ module TogglIntegrator
         @log.info "Created event '#{event.summary}' (#{event.id})"
       end
     rescue => e
-      @log.error "Error: #{e.message}"
+      Logger.new("./tmp/log").error "Error: #{e.message}"
     end
 
     private
@@ -53,7 +51,7 @@ module TogglIntegrator
     def authorize
       FileUtils.mkdir_p File.dirname(@config["google"]["credentials_path"])
 
-      client_id = Google::Auth::ClientId.from_file @config["google"]["client_secret_path"]
+      client_id = Google::Auth::ClientId.from_file ENV["CLIENT_SECRET_FILE"]
       token_store = Google::Auth::Stores::FileTokenStore.new file: @config["google"]["credentials_path"]
       authorizer  = Google::Auth::UserAuthorizer.new client_id, Google::Apis::CalendarV3::AUTH_CALENDAR, token_store
       user_id     = "default"
@@ -65,14 +63,14 @@ module TogglIntegrator
                         "resulting code after authorization\n\n" +
                         "URL: #{url}\n\n" +
                         "Got resulting code? Please input your resulting code"
-        @log.info info_message
+        Logger.new("./tmp/log").info info_message
         puts      info_message
         code = gets
         credentials = authorizer.get_and_store_credentials_from_code user_id: user_id, code: code, base_url: @config["google"]["oob_uri"]
       end
       credentials
     rescue => e
-      @log.error "Error: #{e.message}"
+      Logger.new("./tmp/log").error "Error: #{e.message}"
     end
   end
 
