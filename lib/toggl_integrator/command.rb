@@ -12,12 +12,13 @@ module TogglIntegrator
 
     def initialize
       DB.prepare
-      @task = Task.new
-      @log  = Logger.new "./tmp/log"
+      @log    = Logger.new "./tmp/log"
+      @config = YAML.load_file "config.yml"
     end
 
     def execute
-      Toggl.new(@log, @task).save_time_entries
+      Toggl.new { |o| o.log, o.config = @log, @config }.save_time_entries
+      GoogleCalendar.new { |o| o.log, o.config = @log, @config }.insert_time_entries
     rescue => e
       @log.error "Error: #{e.message}"
     end

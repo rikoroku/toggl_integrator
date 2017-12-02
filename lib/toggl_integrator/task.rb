@@ -16,7 +16,7 @@ module TogglIntegrator
       "DONE"    => DONE
     }.freeze
 
-    def save_tasks data, dates, projects
+    def self.save_tasks data, dates, projects
       Task.where("DATE(at) NOT BETWEEN ? AND ?", dates[:start_date], dates[:end_date]).delete_all
       tasks_ids = Task.all.ids
       data.each do |d|
