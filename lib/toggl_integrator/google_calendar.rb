@@ -13,13 +13,13 @@ module TogglIntegrator
   class GoogleCalendar
 
     def initialize
-      @config = YAML.load_file "config.yml"
       @service = Google::Apis::CalendarV3::CalendarService.new
-      @service.client_options.application_name = @config["google"]["application_name"]
+      @service.client_options.application_name = YAML.load_file("config.yml")["google"]["application_name"]
       @service.authorization = authorize
     end
 
     def insert_time_entries
+      log = Logger.new("./tmp/log")
       tasks = Task.where status: TogglIntegrator::Task::STATUS["NOT_YET"]
       tasks.each do |t|
         event = {
@@ -34,10 +34,10 @@ module TogglIntegrator
 
         event = @service.insert_event "primary", event, send_notifications: true
         t.update status: TogglIntegrator::Task::STATUS["DONE"]
-        @log.info "Created event '#{event.summary}' (#{event.id})"
+        log.info "Created event '#{event.summary}' (#{event.id})"
       end
     rescue => e
-      Logger.new("./tmp/log").error "Error: #{e.message}"
+      log.error "Error: #{e.message}"
     end
 
     private
@@ -49,24 +49,25 @@ module TogglIntegrator
     #
     # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
     def authorize
-      FileUtils.mkdir_p File.dirname(@config["google"]["credentials_path"])
+      config = YAML.load_file "config.yml"
+      FileUtils.mkdir_p File.dirname(config["google"]["credentials_path"])
 
-      client_id = Google::Auth::ClientId.from_file ENV["CLIENT_SECRET_FILE"]
-      token_store = Google::Auth::Stores::FileTokenStore.new file: @config["google"]["credentials_path"]
+      client_id   = Google::Auth::ClientId.from_file ENV["CLIENT_SECRET_FILE"]
+      token_store = Google::Auth::Stores::FileTokenStore.new file: config["google"]["credentials_path"]
       authorizer  = Google::Auth::UserAuthorizer.new client_id, Google::Apis::CalendarV3::AUTH_CALENDAR, token_store
       user_id     = "default"
       credentials = authorizer.get_credentials user_id
       if credentials.nil?
-        url = authorizer.get_authorization_url base_url: @config["google"]["oob_uri"]
+        url = authorizer.get_authorization_url base_url: config["google"]["oob_uri"]
 
         info_message = "Open the following URL in the browser and enter the " +
-                        "resulting code after authorization\n\n" +
-                        "URL: #{url}\n\n" +
-                        "Got resulting code? Please input your resulting code"
+                       "resulting code after authorization\n\n" +
+                       "URL: #{url}\n\n" +
+                       "Got resulting code? Please input your resulting code"
         Logger.new("./tmp/log").info info_message
-        puts      info_message
+        puts info_message
         code = gets
-        credentials = authorizer.get_and_store_credentials_from_code user_id: user_id, code: code, base_url: @config["google"]["oob_uri"]
+        credentials = authorizer.get_and_store_credentials_from_code user_id: user_id, code: code, base_url: config["google"]["oob_uri"]
       end
       credentials
     rescue => e
