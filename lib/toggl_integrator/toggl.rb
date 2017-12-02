@@ -9,11 +9,8 @@ module TogglIntegrator
   # @author rikoroku
   class Toggl
 
-    attr_accessor :log, :config
-
     def initialize
-      yield self if block_given?
-      @toggl_api  = TogglV8::API.new @config["toggl"]["api_token"]
+      @toggl_api  = TogglV8::API.new ENV["TOGGL_API_TOKEN"]
       @user       = @toggl_api.me all=true
     end
 
@@ -24,7 +21,7 @@ module TogglIntegrator
       time_entries = @toggl_api.get_time_entries dates.map { |k, v| [k, v.to_s] }.to_h
       Task.save_tasks time_entries, dates, projects
     rescue => e
-      @log.error "Error: #{e.message}"
+      Logger.new("./tmp/log").error "Error: #{e.message}"
     end
 
   end
