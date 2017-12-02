@@ -1,8 +1,4 @@
-toggl:
-  api_token:          "Your api token toggl" #TODO: Must update at your api token toggl
-
 google:
   oob_uri:            urn:ietf:wg:oauth:2.0:oob
   application_name:   toggl_integrator
-  client_secret_path: "Your path client_secret.json" #TODO: Must update at your path client_secret.json
   credentials_path:   google-calendar.yaml
