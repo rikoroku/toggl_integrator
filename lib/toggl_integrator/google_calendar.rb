@@ -14,7 +14,7 @@ module TogglIntegrator
 
     def initialize
       @service = Google::Apis::CalendarV3::CalendarService.new
-      @service.client_options.application_name = YAML.load_file(File.join(__dir__, "../../config.yml"))["google"]["application_name"]
+      @service.client_options.application_name = YAML.load_file("config.yml")["google"]["application_name"]
       @service.authorization = authorize
     end
 
@@ -49,7 +49,7 @@ module TogglIntegrator
     #
     # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
     def authorize
-      config = YAML.load_file File.join(__dir__, "../../config.yml")
+      config = YAML.load_file "config.yml"
       FileUtils.mkdir_p File.dirname(config["google"]["credentials_path"])
 
       client_id   = Google::Auth::ClientId.from_file ENV["CLIENT_SECRET_FILE"]
