@@ -19,7 +19,7 @@ module TogglIntegrator
     end
 
     def insert_time_entries
-      log = Logger.new("./tmp/log")
+      log = Logger.new("#{ENV["HOME"]}/.toggl_integrator/log")
       tasks = Task.where status: TogglIntegrator::Task::STATUS["NOT_YET"]
       tasks.each do |t|
         event = {
@@ -64,14 +64,14 @@ module TogglIntegrator
                        "resulting code after authorization\n\n" +
                        "URL: #{url}\n\n" +
                        "Got resulting code? Please input your resulting code"
-        Logger.new("./tmp/log").info info_message
+        Logger.new("#{ENV["HOME"]}/.toggl_integrator/log").info info_message
         puts info_message
         code = gets
         credentials = authorizer.get_and_store_credentials_from_code user_id: user_id, code: code, base_url: config["google"]["oob_uri"]
       end
       credentials
     rescue => e
-      Logger.new("./tmp/log").error "Error: #{e.message}"
+      Logger.new("#{ENV["HOME"]}/.toggl_integrator/log").error "Error: #{e.message}"
     end
   end
 
