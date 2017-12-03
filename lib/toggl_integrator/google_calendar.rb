@@ -50,10 +50,10 @@ module TogglIntegrator
     # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
     def authorize
       config = YAML.load_file File.join(__dir__, "../../config.yml")
-      FileUtils.mkdir_p File.dirname(config["google"]["credentials_path"])
+      FileUtils.mkdir_p File.dirname File.join("#{ENV["HOME"]}/.toggl_integrator/google-calendar.yaml")
 
       client_id   = Google::Auth::ClientId.from_file ENV["CLIENT_SECRET_FILE"]
-      token_store = Google::Auth::Stores::FileTokenStore.new file: config["google"]["credentials_path"]
+      token_store = Google::Auth::Stores::FileTokenStore.new file: File.join("#{ENV["HOME"]}/.toggl_integrator/google-calendar.yaml")
       authorizer  = Google::Auth::UserAuthorizer.new client_id, Google::Apis::CalendarV3::AUTH_CALENDAR, token_store
       user_id     = "default"
       credentials = authorizer.get_credentials user_id
