@@ -1,5 +1,7 @@
 # config: utf-8
 
+require "fileutils"
+
 module TogglIntegrator
 
   # execute tasks for command line base
@@ -12,13 +14,14 @@ module TogglIntegrator
 
     def initialize
       DB.prepare
+      FileUtils.mkdir_p File.dirname File.join(ENV["HOME"], ".toggl_integrator", "log")
     end
 
     def execute
       Toggl.new.save_time_entries
       GoogleCalendar.new.insert_time_entries
     rescue => e
-      Logger.new("./tmp/log").error "Error: #{e.message}"
+      Logger.new("#{ENV["HOME"]}/.toggl_integrator/log").error "Error: #{e.message}"
     end
 
   end
