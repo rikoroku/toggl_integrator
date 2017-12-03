@@ -1,4 +1,3 @@
 google:
   oob_uri:            urn:ietf:wg:oauth:2.0:oob
   application_name:   toggl_integrator
-  credentials_path:   google-calendar.yaml
