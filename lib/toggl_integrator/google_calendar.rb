@@ -30,6 +30,7 @@ module TogglIntegrator
           end: {
             date_time: DateTime.parse("#{t[:stop].localtime}")
           }
+          color_id: 8
         }
 
         event = @service.insert_event "primary", event, send_notifications: true
