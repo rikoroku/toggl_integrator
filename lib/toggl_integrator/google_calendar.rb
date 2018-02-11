@@ -29,7 +29,7 @@ module TogglIntegrator
           },
           end: {
             date_time: DateTime.parse("#{t[:stop].localtime}")
-          }
+          },
           color_id: 8
         }
 
