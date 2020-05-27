@@ -1,0 +1,7 @@
+require:
+  - rubocop-performance # https://github.com/rubocop-hq/rubocop-performance/
+
+AllCops:
+  Exclude:
+    - "vendor/**/*"
+    - "bin/**/*"
