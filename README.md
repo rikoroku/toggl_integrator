@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/rikoroku/toggl_integrator.svg?branch=master)](https://travis-ci.org/rikoroku/toggl_integrator)
+[![Maintainability](https://api.codeclimate.com/v1/badges/5debd001c75ec6ad575a/maintainability)](https://codeclimate.com/github/rikoroku/toggl_integrator/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/5debd001c75ec6ad575a/test_coverage)](https://codeclimate.com/github/rikoroku/toggl_integrator/test_coverage)
 
 [toggl_integrator](https://github.com/rikoroku/toggl_integrator) is an Integrator that integrate toggl reports into Google Calendar.
 
