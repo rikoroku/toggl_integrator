@@ -1,6 +1,8 @@
-require "bundler/gem_tasks"
-require "yard"
+# frozen_string_literal: true
 
-task :default => :spec
+require 'bundler/gem_tasks'
+require 'yard'
+
+task default: :spec
 
 YARD::Rake::YardocTask.new

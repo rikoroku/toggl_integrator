@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require "toggl_integrator"
+require 'toggl_integrator'
 
 TogglIntegrator::Command.run
