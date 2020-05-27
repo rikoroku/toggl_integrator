@@ -20,7 +20,7 @@ module TogglIntegrator
       Toggl.new.save_time_entries
       GoogleCalendar.new.insert_time_entries
     rescue StandardError => e
-      Logger.new("#{ENV['PROJECT_PATH']}/.toggl_integrator/log").error "Error: #{e.message}"
+      Logging.error(e.message)
     end
   end
 end
