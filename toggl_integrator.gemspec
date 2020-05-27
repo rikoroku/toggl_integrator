@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['rikoroku']
   spec.email         = ['rikoroku.55@gmail.com']
 
-  spec.summary       = 'Toggl Integration With Google Calendar.'
-  spec.homepage      = 'https://kogawa.work/'
+  spec.summary       = 'Integrate toggl reports into Google Calendar.'
+  spec.homepage      = 'https://github.com/rikoroku'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
