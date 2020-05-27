@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'activerecord', '~> 4.2.0'
+  spec.add_dependency 'dotenv', '~> 2.7.5'
   spec.add_dependency 'google-api-client'
   spec.add_dependency 'sqlite3', '~> 1.3.0'
 
