@@ -21,7 +21,7 @@ module TogglIntegrator
       time_entries = @toggl_api.get_time_entries dates.map { |k, v| [k, v.to_s] }.to_h
       Task.save_tasks time_entries, dates, projects
     rescue StandardError => e
-      Logger.new("#{ENV['HOME']}/.toggl_integrator/log").error "Error: #{e.message}"
+      Logger.new("#{ENV['PROJECT_PATH']}/.toggl_integrator/log").error "Error: #{e.message}"
     end
   end
 end

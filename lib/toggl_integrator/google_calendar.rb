@@ -51,10 +51,10 @@ module TogglIntegrator
     # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
     def authorize
       config = YAML.load_file File.join(__dir__, '../../config.yml')
-      FileUtils.mkdir_p File.dirname File.join("#{ENV['HOME']}/.toggl_integrator/google-calendar.yaml")
+      FileUtils.mkdir_p File.dirname File.join("#{ENV['PROJECT_PATH']}/.toggl_integrator/google-calendar.yaml")
 
       client_id   = Google::Auth::ClientId.from_file ENV['CLIENT_SECRET_FILE']
-      token_store = Google::Auth::Stores::FileTokenStore.new file: File.join("#{ENV['HOME']}/.toggl_integrator/google-calendar.yaml")
+      token_store = Google::Auth::Stores::FileTokenStore.new file: File.join("#{ENV['PROJECT_PATH']}/.toggl_integrator/google-calendar.yaml")
       authorizer  = Google::Auth::UserAuthorizer.new client_id, Google::Apis::CalendarV3::AUTH_CALENDAR, token_store
       user_id     = 'default'
       credentials = authorizer.get_credentials user_id
@@ -65,14 +65,14 @@ module TogglIntegrator
                        "resulting code after authorization\n\n" \
                        "URL: #{url}\n\n" \
                        'Got resulting code? Please input your resulting code'
-        Logger.new("#{ENV['HOME']}/.toggl_integrator/log").info info_message
+        Logger.new("#{ENV['PROJECT_PATH']}/.toggl_integrator/log").info info_message
         puts info_message
         code = gets
         credentials = authorizer.get_and_store_credentials_from_code user_id: user_id, code: code, base_url: config['google']['oob_uri']
       end
       credentials
     rescue StandardError => e
-      Logger.new("#{ENV['HOME']}/.toggl_integrator/log").error "Error: #{e.message}"
+      Logger.new("#{ENV['PROJECT_PATH']}/.toggl_integrator/log").error "Error: #{e.message}"
     end
   end
 end

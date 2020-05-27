@@ -8,6 +8,9 @@ require 'toggl_integrator/toggl'
 require 'toggl_integrator/google_calendar'
 require 'logger'
 require 'yaml'
+require 'dotenv/load'
 
 module TogglIntegrator
+  Dotenv.load('.env')
+  FileUtils.mkdir_p File.dirname File.join(ENV['PROJECT_PATH'], '.toggl_integrator', 'log')
 end

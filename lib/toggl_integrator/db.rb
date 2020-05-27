@@ -12,7 +12,7 @@ module TogglIntegrator
     # Connection processing to DB and Creating tables
     # @return [void]
     def self.prepare
-      database_path = File.join(ENV['HOME'], '.toggl_integrator', 'toggl_integrator.sqlite3')
+      database_path = File.join(ENV['PROJECT_PATH'], '.toggl_integrator', 'toggl_integrator.sqlite3')
 
       connect_database database_path
       create_table_if_not_exists database_path

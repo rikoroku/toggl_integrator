@@ -14,14 +14,13 @@ module TogglIntegrator
 
     def initialize
       DB.prepare
-      FileUtils.mkdir_p File.dirname File.join(ENV['HOME'], '.toggl_integrator', 'log')
     end
 
     def execute
       Toggl.new.save_time_entries
       GoogleCalendar.new.insert_time_entries
     rescue StandardError => e
-      Logger.new("#{ENV['HOME']}/.toggl_integrator/log").error "Error: #{e.message}"
+      Logger.new("#{ENV['PROJECT_PATH']}/.toggl_integrator/log").error "Error: #{e.message}"
     end
   end
 end
