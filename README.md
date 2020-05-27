@@ -1,9 +1,9 @@
 # Toggl Integrator
-[toggl_integrator](https://github.com/rikoroku/toggl_integrator) is an Integrator for Toggl to Google Calendar.
+[toggl_integrator](https://github.com/rikoroku/toggl_integrator) is an Integrator for integrate toggl reports into Google Calendar.
 
 ## Installation
 
-Add this line to your Gemfile:
+Add the following line to your Gemfile:
 
 ```ruby
 gem "togglv8", :git => "https://github.com/kanet77/togglv8", :branch => "master"
@@ -15,8 +15,8 @@ And then execute:
     $ bundle install
 
 ## Usage
-### 1. 1st time only
-#### 1-1. Set environment variable.
+### 1. first time only
+#### 1-1. Set environment variables.
 #### 1-1-1. Toggl
 You need to get toggl API token.
 About API token: Each user in [Toggl.com](https://www.toggl.com/) has an API token. They can find it under "My Profile" in their Toggl account.
