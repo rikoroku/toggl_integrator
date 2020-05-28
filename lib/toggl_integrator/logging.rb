@@ -2,14 +2,14 @@
 
 module TogglIntegrator
   # Logging
-  # @author rikoroku
   class Logging
     include Singleton
 
     attr_reader :logger
 
     def initialize
-      @logger = Logger.new("#{ENV['PROJECT_PATH']}/.toggl_integrator/log")
+      FileUtil.new_file_if_not_exists('log')
+      @logger = Logger.new(FileUtil.join('log'))
     end
 
     def self.info(msg)
