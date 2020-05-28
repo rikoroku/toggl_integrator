@@ -9,69 +9,103 @@ require 'googleauth/stores/file_token_store'
 require 'fileutils'
 
 module TogglIntegrator
-  # Class Google for Google API
-  # @author rikoroku
+  # class GoogleCalendar
   class GoogleCalendar
-    def initialize
-      @service = Google::Apis::CalendarV3::CalendarService.new
-      @service.client_options.application_name = YAML.load_file(File.join(__dir__, '../../config.yml'))['google']['application_name']
-      @service.authorization = authorize
-    end
+    class << self
+      def sync_time_entries
+        time_entries = TimeEntory.where status:
+          TogglIntegrator::TimeEntory::STATUS[:NOT_YET]
+        time_entries.each do |t|
+          res = service.insert_event 'primary', generate_event(t),
+                                     send_notifications: true
+          t.update status: TogglIntegrator::TimeEntory::STATUS[:DONE]
+          Logging.info("Created event '#{res.summary}' (#{res.id})")
+        end
+      rescue StandardError => e
+        Logging.error(e.message)
+      end
 
-    def insert_time_entries
-      tasks = Task.where status: TogglIntegrator::Task::STATUS['NOT_YET']
-      tasks.each do |t|
-        event = {
-          summary: "#{t[:project_name]} : #{t[:description]}",
+      private
+
+      def service
+        return @service if @service.present?
+
+        @service = authorized_service
+      end
+
+      def config
+        @config ||= YAML.load_file File.join(__dir__, '../../config.yml')
+      end
+
+      def generate_event(time_entry)
+        {
+          summary: "#{time_entry[:project_name]} : #{time_entry[:description]}",
           start: {
-            date_time: DateTime.parse(t[:start].localtime.to_s)
+            date_time: DateTime.parse(time_entry[:start].localtime.to_s)
           },
           end: {
-            date_time: DateTime.parse(t[:stop].localtime.to_s)
+            date_time: DateTime.parse(time_entry[:stop].localtime.to_s)
           },
           color_id: 8
         }
-
-        event = @service.insert_event 'primary', event, send_notifications: true
-        t.update status: TogglIntegrator::Task::STATUS['DONE']
-        Logging.info("Created event '#{event.summary}' (#{event.id})")
       end
-    rescue StandardError => e
-      Logging.error(e.message)
-    end
 
-    private
+      def authorizer
+        return @authorizer if @authorizer.present?
 
-    ##
-    # Ensure valid credentials, either by restoring from the saved credentials
-    # files or intitiating an OAuth2 authorization. If authorization is required,
-    # the user's default browser will be launched to approve the request.
-    #
-    # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
-    def authorize
-      config = YAML.load_file File.join(__dir__, '../../config.yml')
-      FileUtils.mkdir_p File.dirname File.join("#{ENV['PROJECT_PATH']}/.toggl_integrator/google-calendar.yaml")
+        client_id   = Google::Auth::ClientId.from_file ENV['CLIENT_SECRET_FILE']
+        token_store = Google::Auth::Stores::FileTokenStore.new file:
+          FileUtil.join('google-calendar.yaml')
+        @authorizer = Google::Auth::UserAuthorizer.new client_id,
+                                                       Google::Apis::CalendarV3::\
+                                                       AUTH_CALENDAR,
+                                                       token_store
+      end
 
-      client_id   = Google::Auth::ClientId.from_file ENV['CLIENT_SECRET_FILE']
-      token_store = Google::Auth::Stores::FileTokenStore.new file: File.join("#{ENV['PROJECT_PATH']}/.toggl_integrator/google-calendar.yaml")
-      authorizer  = Google::Auth::UserAuthorizer.new client_id, Google::Apis::CalendarV3::AUTH_CALENDAR, token_store
-      user_id     = 'default'
-      credentials = authorizer.get_credentials user_id
-      if credentials.nil?
-        url = authorizer.get_authorization_url base_url: config['google']['oob_uri']
+      def authorized_service
+        service = Google::Apis::CalendarV3::CalendarService.new
+        service.client_options.application_name =
+          config['google']['application_name']
+        service.authorization = credentials
+        service
+      end
+
+      ##
+      # Ensure valid credentials, either by restoring from the saved credentials
+      # files or intitiating an OAuth2 authorization.
+      # If authorization is required, the user's default browser
+      # will be launched to approve the request.
+      #
+      # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
+      def credentials
+        return @credentials if @credentials.present?
+
+        FileUtil.new_file_if_not_exists('google-calendar.yaml')
+
+        @credentials = authorizer.get_credentials user_id
+        @credentials = credentials_from_code if @credentials.nil?
+        @credentials
+      rescue StandardError => e
+        Logging.error(e.message)
+      end
+
+      def user_id
+        @user_id ||= 'default'
+      end
+
+      def credentials_from_code
+        url = authorizer.get_authorization_url base_url:
+          config['google']['oob_uri']
 
         info_message = 'Open the following URL in the browser and enter the ' \
-                       "resulting code after authorization\n\n" \
-                       "URL: #{url}\n\n" \
-                       'Got resulting code? Please input your resulting code'
+                      "resulting code after authorization\n\n URL: #{url}\n\n" \
+                      'Got resulting code? Please input your resulting code'
         Logging.info(info_message)
         puts info_message
         code = gets
-        credentials = authorizer.get_and_store_credentials_from_code user_id: user_id, code: code, base_url: config['google']['oob_uri']
+        authorizer.get_and_store_credentials_from_code user_id:
+          user_id, code: code, base_url: config['google']['oob_uri']
       end
-      credentials
-    rescue StandardError => e
-      Logging.error(e.message)
     end
   end
 end

@@ -1,12 +1,7 @@
 # frozen_string_literal: true
 
-# config: utf-8
-
-require 'fileutils'
-
 module TogglIntegrator
-  # execute tasks for command line base
-  # @author rikoroku
+  # class Command
   class Command
     def self.run
       new.execute
@@ -17,8 +12,8 @@ module TogglIntegrator
     end
 
     def execute
-      GoogleCalendar.new.insert_time_entries
       TimeEntoryService.fetch_and_store
+      GoogleCalendar.sync_time_entries
     rescue StandardError => e
       Logging.error(e.message)
     end
