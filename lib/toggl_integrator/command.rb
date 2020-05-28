@@ -17,8 +17,8 @@ module TogglIntegrator
     end
 
     def execute
-      Toggl.new.save_time_entries
       GoogleCalendar.new.insert_time_entries
+      TimeEntoryService.fetch_and_store
     rescue StandardError => e
       Logging.error(e.message)
     end
