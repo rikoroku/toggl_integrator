@@ -51,7 +51,7 @@ module TogglIntegrator
           end: {
             date_time: DateTime.parse(time_entry[:stop].localtime.to_s)
           },
-          color_id: 8
+          color_id: ENV['COLOR_ID']
         }
       end
 
