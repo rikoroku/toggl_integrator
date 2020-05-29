@@ -13,13 +13,10 @@ module TogglIntegrator
   class GoogleCalendar
     class << self
       def sync_time_entries
-        time_entries = TimeEntory.where status:
-          TogglIntegrator::TimeEntory::STATUS[:NOT_YET]
-        time_entries.each do |t|
-          res = service.insert_event 'primary', generate_event(t),
-                                     send_notifications: true
-          t.update status: TogglIntegrator::TimeEntory::STATUS[:DONE]
-          Logging.info("Created event '#{res.summary}' (#{res.id})")
+        time_entries.each do |time_entory|
+          res = sync(time_entory)
+          time_entory.update status: TogglIntegrator::TimeEntory::STATUS[:DONE]
+          Logging.info("Synced event '#{res.summary}' (#{res.id})")
         end
       rescue StandardError => e
         Logging.error(e.message)
@@ -27,10 +24,18 @@ module TogglIntegrator
 
       private
 
-      def service
-        return @service if @service.present?
+      def time_entries
+        @time_entries ||= TimeEntory.where status:
+          TogglIntegrator::TimeEntory::STATUS[:NOT_YET]
+      end
 
-        @service = authorized_service
+      def sync(time_entory)
+        service.insert_event 'primary', generate_event(time_entory),
+                             send_notifications: true
+      end
+
+      def service
+        @service ||= authorized_service
       end
 
       def config
@@ -70,13 +75,6 @@ module TogglIntegrator
         service
       end
 
-      ##
-      # Ensure valid credentials, either by restoring from the saved credentials
-      # files or intitiating an OAuth2 authorization.
-      # If authorization is required, the user's default browser
-      # will be launched to approve the request.
-      #
-      # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
       def credentials
         return @credentials if @credentials.present?
 
