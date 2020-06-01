@@ -24,10 +24,10 @@ And then execute:
 
 You need to get a toggl API token and can get the toggl API token from bottom of [Your profile page](https://www.toggl.com/app/profile).
 
-And then, when you have got the toggl API token. You have to execute the following command.
+When you have got the toggl API token, write it to `.env`
 
-```
-$ export TOGGL_API_TOKEN="your api token"
+```bash:.env
+TOGGL_API_TOKEN='your toggl API token'
 ```
 
 #### Google Calendar
@@ -45,11 +45,23 @@ About turn on the Google Calendar API and get client_secret.json:
 7. Click the (Download JSON) button to the right of the client ID.
 8. Move this file to your working directory and rename it `client_secret.json`.
 
-And then, when you have got the client_secret.json. You have to execute the following commands.
+When you have got the client_secret.json, write it to `.env`
 
+```bash:.env
+CLIENT_SECRET_FILE='/Users/username/Documents/.secret/client_secret.json'
 ```
-$ export CLIENT_SECRET_FILE="Your client_secret.json path"
-$ source ~/.bash_profile
+
+#### Other
+
+Follow the instructions below to set other variables to '.env'
+
+```bash:.env
+# Specify toggl_integrator project directory that will be automatically generated. This directory includes a log file and SQL data.
+PROJECT_PATH='/Users/username/Documents/'
+
+# The COLOR_ID is a color of the event when integrated Google Calendar. If you want to know the id? You can do it from follows.
+# URL: https://developers.google.com/calendar/v3/reference/colors/get
+COLOR_ID='8'
 ```
 
 ### 2. Authorization
