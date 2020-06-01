@@ -9,7 +9,8 @@
 Add the following line to your Gemfile:
 
 ```ruby
-gem "toggl_integrator", :git => "https://github.com/rikoroku/toggl_integrator", :branch => "master"
+gem 'togglv8', git: 'https://github.com/CHIYUU-Official/togglv8', branch: 'master'
+gem "toggl_integrator"
 ```
 
 And then execute:
