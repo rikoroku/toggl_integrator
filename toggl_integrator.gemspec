@@ -11,10 +11,15 @@ Gem::Specification.new do |spec|
   spec.email         = ['rikoroku.55@gmail.com']
 
   spec.summary       = 'Integrate toggl reports into Google Calendar.'
+  spec.description   = 'The gem makes you easier to see your toggl reports with Google Calendar.'
   spec.homepage      = 'https://github.com/rikoroku'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
+  spec.metadata['source_code_uri'] = 'https://github.com/rikoroku/toggl_integrator'
+  spec.metadata['changelog_uri'] = 'https://github.com/rikoroku/toggl_integrator/blob/master/CHANGELOG.md'
+
+  spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
 
