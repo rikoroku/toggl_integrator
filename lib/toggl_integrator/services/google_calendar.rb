@@ -18,8 +18,6 @@ module TogglIntegrator
           time_entory.update status: TogglIntegrator::TimeEntory::STATUS[:DONE]
           Logging.info("Synced event '#{res.summary}' (#{res.id})")
         end
-      rescue StandardError => e
-        Logging.error(e.message)
       end
 
       private
