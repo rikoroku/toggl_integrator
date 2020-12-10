@@ -15,7 +15,7 @@ module TogglIntegrator
                          start_date, end_date).delete_all
       end
 
-      def create_with_toggl(args)
+      def create_with(args)
         time_entory = args[:time_entory]
         TimeEntory.create({
                             id: time_entory['id'],

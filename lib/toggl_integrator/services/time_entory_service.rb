@@ -9,8 +9,8 @@ module TogglIntegrator
         Toggl.time_entries.each do |time_entory|
           next if createable?(time_entory)
 
-          TimeEntory.create_with_toggl({ time_entory: time_entory,
-                                         projects: Toggl.my_projects })
+          TimeEntory.create_with({ time_entory: time_entory,
+                                   projects: Toggl.my_projects })
         end
       end
 
