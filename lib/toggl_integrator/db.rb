@@ -25,16 +25,16 @@ module TogglIntegrator
       def create_table_if_not_exists
         connection = ActiveRecord::Base.connection
 
-        return if connection.table_exists? :time_entories
+        return if connection.table_exists? :time_entries
 
-        create_time_entories_table(connection)
-        connection.add_index :time_entories, :start
-        connection.add_index :time_entories, :stop
-        connection.add_index :time_entories, :status
+        create_time_entries_table(connection)
+        connection.add_index :time_entries, :start
+        connection.add_index :time_entries, :stop
+        connection.add_index :time_entries, :status
       end
 
-      def create_time_entories_table(connection)
-        connection.create_table :time_entories do |t|
+      def create_time_entries_table(connection)
+        connection.create_table :time_entries do |t|
           t.column :project_name, :string,    null: true
           t.column :description,  :string,    null: true
           t.column :start,        :timestamp, null: false

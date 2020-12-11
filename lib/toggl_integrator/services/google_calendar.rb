@@ -13,9 +13,9 @@ module TogglIntegrator
   class GoogleCalendar
     class << self
       def sync_time_entries
-        time_entries.each do |time_entory|
-          res = sync(time_entory)
-          time_entory.update status: TogglIntegrator::TimeEntory::STATUS[:DONE]
+        time_entries.each do |time_entry|
+          res = sync(time_entry)
+          time_entry.update status: TogglIntegrator::TimeEntry::STATUS[:DONE]
           Logging.info("Synced event '#{res.summary}' (#{res.id})")
         end
       end
@@ -23,12 +23,12 @@ module TogglIntegrator
       private
 
       def time_entries
-        @time_entries ||= TimeEntory.where status:
-          TogglIntegrator::TimeEntory::STATUS[:NOT_YET]
+        @time_entries ||= TimeEntry.where status:
+          TogglIntegrator::TimeEntry::STATUS[:NOT_YET]
       end
 
-      def sync(time_entory)
-        service.insert_event 'primary', generate_event(time_entory),
+      def sync(time_entry)
+        service.insert_event 'primary', generate_event(time_entry),
                              send_notifications: true
       end
 
