@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 1.16'
   spec.add_development_dependency 'byebug'
+  spec.add_development_dependency 'factory_bot'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'redcarpet', '~> 2.2'
   spec.add_development_dependency 'rspec'

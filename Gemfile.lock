@@ -43,6 +43,8 @@ GEM
     declarative-option (0.1.0)
     diff-lcs (1.4.4)
     dotenv (2.7.5)
+    factory_bot (5.2.0)
+      activesupport (>= 4.2.0)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
     google-api-client (0.39.5)
@@ -130,6 +132,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.16)
   byebug
+  factory_bot
   rake (~> 13.0)
   redcarpet (~> 2.2)
   rspec
