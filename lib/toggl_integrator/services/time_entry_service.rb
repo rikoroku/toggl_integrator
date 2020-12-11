@@ -20,6 +20,7 @@ module TogglIntegrator
         return @dates if @dates.present?
 
         today = Date.today
+        # must be changed to way to specify the range of dates with environment variables
         @dates = { start_date: today - 1, end_date: today + 1 }
       end
 
