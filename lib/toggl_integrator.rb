@@ -17,4 +17,5 @@ Dotenv.load('.env')
 
 # module TogglIntegrator
 module TogglIntegrator
+  ActiveRecord::Base.default_timezone = :local
 end
