@@ -5,3 +5,8 @@ AllCops:
   Exclude:
     - "vendor/**/*"
     - "bin/**/*"
+
+Metrics/BlockLength:
+  Exclude:
+    - "./spec/**/*"
+    - "toggl_integrator.gemspec"
