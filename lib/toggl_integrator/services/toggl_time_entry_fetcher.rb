@@ -25,7 +25,7 @@ module TogglIntegrator
     end
 
     def delete_already_existing_time_entries_outside_of_sync_targets
-      TimeEntry.delete_all_not_between(dates[:start_date], dates[:end_date])
+      TimeEntry.delete_all_not_between(@toggl.dates[:start_date], @toggl.dates[:end_date])
     end
 
     def fetch
@@ -45,14 +45,6 @@ module TogglIntegrator
                       TimeEntry.all.ids.include?(time_entry['id'])
 
       true
-    end
-
-    def dates
-      return @dates if @dates.present?
-
-      today = Date.today
-      # TODO: must be changed to way to specify the range of dates with environment variables
-      @dates = { start_date: today - 1, end_date: today + 1 }
     end
   end
 end

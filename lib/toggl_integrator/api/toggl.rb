@@ -6,9 +6,12 @@ require 'date'
 module TogglIntegrator
   # class Toggl
   class Toggl
-    def initialize
+    attr_reader :dates
+
+    def initialize(args)
       @api = TogglV8::API.new ENV['TOGGL_API_TOKEN']
       @user = @api.me true
+      @dates = args[:date_generator].range_to_fetch
     end
 
     def my_projects
@@ -20,16 +23,7 @@ module TogglIntegrator
     end
 
     def time_entries
-      @api.get_time_entries dates.map { |k, v| [k, v.to_s] }.to_h
-    end
-
-    private
-
-    def dates
-      return @dates if @dates.present?
-
-      today = Date.today
-      @dates = { start_date: today - 1, end_date: today + 1 }
+      @api.get_time_entries @dates.map { |k, v| [k, v.to_s] }.to_h
     end
   end
 end
