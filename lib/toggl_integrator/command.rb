@@ -12,8 +12,8 @@ module TogglIntegrator
     end
 
     def execute
-      TimeEntryService.fetch_and_store
-      GoogleCalendar.sync_time_entries
+      TogglTimeEntryFetcher.call(toggl: Toggl.new)
+      GoogleCalendarSyncer.call(google_calendar: GoogleCalendar.new)
     rescue StandardError => e
       puts "[ERROR] An unexpected error has occurred: #{e.message}"
       Logging.error(e.message)
