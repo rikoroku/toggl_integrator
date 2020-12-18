@@ -12,12 +12,28 @@ module TogglIntegrator
       @logger = Logger.new(FileUtil.join('log'))
     end
 
-    def self.info(msg)
-      instance.logger.info msg
-    end
+    class << self
+      def info(msg)
+        info_message = make_info_message(msg)
+        puts info_message
+        instance.logger.info info_message
+      end
 
-    def self.error(msg)
-      instance.logger.error msg
+      def error(msg)
+        error_msg = make_error_message(msg)
+        puts error_msg
+        instance.logger.error error_msg
+      end
+
+      private
+
+      def make_info_message(body)
+        "[INFO] #{body}"
+      end
+
+      def make_error_message(body)
+        "[ERROR] An unexpected error has occurred: #{body}"
+      end
     end
   end
 end
