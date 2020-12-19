@@ -11,16 +11,16 @@ require 'fileutils'
 module TogglIntegrator
   # class GoogleCalendar
   class GoogleCalendar
-    def initialize
-      @service = authorized_service
-    end
-
     def sync(time_entry)
-      @service.insert_event 'primary', generate_event(time_entry),
-                            send_notifications: true
+      service.insert_event 'primary', generate_event(time_entry),
+                           send_notifications: true
     end
 
     private
+
+    def service
+      @service ||= authorized_service
+    end
 
     def config
       @config ||= YAML.load_file File.join(__dir__, '../../../config.yml')

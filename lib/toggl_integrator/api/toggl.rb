@@ -9,13 +9,11 @@ module TogglIntegrator
     attr_reader :dates
 
     def initialize(args)
-      @api = TogglV8::API.new ENV['TOGGL_API_TOKEN']
-      @user = @api.me true
       @dates = args[:date_generator].range_to_fetch
     end
 
     def my_projects
-      @api.my_projects(@user).map do |i|
+      api.my_projects(user).map do |i|
         {
           'id' => i['id'], 'name' => i['name']
         }
@@ -23,7 +21,17 @@ module TogglIntegrator
     end
 
     def time_entries
-      @api.get_time_entries @dates.map { |k, v| [k, v.to_s] }.to_h
+      api.get_time_entries @dates.map { |k, v| [k, v.to_s] }.to_h
+    end
+
+    private
+
+    def user
+      @user ||= api.me true
+    end
+
+    def api
+      @api ||= TogglV8::API.new ENV['TOGGL_API_TOKEN']
     end
   end
 end
