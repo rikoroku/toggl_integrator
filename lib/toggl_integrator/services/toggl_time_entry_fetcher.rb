@@ -9,13 +9,12 @@ module TogglIntegrator
 
     def initialize(args)
       @toggl = args[:toggl]
-      @time_entries = []
     end
 
     def execute
-      fetch
+      time_entries = fetch
       before_store
-      store
+      store(time_entries)
     end
 
     private
@@ -29,11 +28,11 @@ module TogglIntegrator
     end
 
     def fetch
-      @time_entries = @toggl.time_entries
+      @toggl.time_entries
     end
 
-    def store
-      @time_entries.each do |time_entry|
+    def store(time_entries)
+      time_entries.each do |time_entry|
         next unless can_create?(time_entry)
 
         TimeEntry.create_with({ time_entry: time_entry, projects: @toggl.my_projects })
