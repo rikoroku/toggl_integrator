@@ -22,8 +22,7 @@ module TogglIntegrator
     private
 
     def time_entries
-      @time_entries ||= TimeEntry.where status:
-        TogglIntegrator::TimeEntry::STATUS[:NOT_YET]
+      TimeEntry.where status: TogglIntegrator::TimeEntry::STATUS[:NOT_YET]
     end
   end
 end
