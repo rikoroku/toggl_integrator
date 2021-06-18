@@ -12,7 +12,7 @@ module TogglIntegrator
     end
 
     def execute
-      time_entries = fetch
+      time_entries = @toggl.fetch_time_entries
       before_store
       store(time_entries)
     end
@@ -25,10 +25,6 @@ module TogglIntegrator
 
     def delete_already_existing_time_entries_outside_of_sync_targets
       TimeEntry.delete_all_not_between(@toggl.dates[:start_date], @toggl.dates[:end_date])
-    end
-
-    def fetch
-      @toggl.time_entries
     end
 
     def store(time_entries)

@@ -20,7 +20,7 @@ module TogglIntegrator
       end
     end
 
-    def time_entries
+    def fetch_time_entries
       api.get_time_entries @dates.map { |k, v| [k, v.to_s] }.to_h
     end
 
